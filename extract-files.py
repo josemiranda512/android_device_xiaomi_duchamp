@@ -46,6 +46,9 @@ blob_fixups: blob_fixups_user_type = {
     'vendor/lib64/hw/android.hardware.soundtrigger3-impl.so': blob_fixup()
         .replace_needed('libaudio_aidl_conversion_common_ndk.so', 'libaudio_aidl_conversion_common_ndk-v34.so'),
 
+    'vendor/lib64/hw/android.hardware.audio@7.1-impl-mediatek.so': blob_fixup()
+        .add_needed('libaudio_metadata_shim.so'),
+
     'vendor/lib64/vendor.mediatek.hardware.bluetooth.audio-V1-ndk.so': blob_fixup()
         .replace_needed('android.hardware.audio.common-V1-ndk.so', 'android.hardware.audio.common-V2-ndk.so'),
 
@@ -80,6 +83,10 @@ blob_fixups: blob_fixups_user_type = {
         .clear_symbol_version('AHardwareBuffer_lockPlanes')
         .clear_symbol_version('AHardwareBuffer_release')
         .clear_symbol_version('AHardwareBuffer_unlock'),
+
+
+    ('vendor/lib64/libcodec2_mtk_vdec.so', 'vendor/lib64/libcodec2_mtk_venc.so'): blob_fixup()
+        .replace_needed('libformatter.so', 'libformatter-v34.so'),
 
     'vendor/lib64/mt6897/libmtkcam_hwnode.jpegnode.so': blob_fixup()
         .replace_needed('libultrahdr.so', 'libultrahdr-v34.so'),
@@ -125,7 +132,8 @@ blob_fixups: blob_fixups_user_type = {
         .replace_needed('lib_android_keymaster_keymint_utils.so', 'lib_android_keymaster_keymint_utils_V3.so'),
 
     'vendor/lib64/libkeymint_remote_prov_support_V3.so': blob_fixup()
-        .replace_needed('libbase.so', 'libbase-v34.so'),
+        .replace_needed('libbase.so', 'libbase-v34.so')
+        .add_needed('libcppcose_rkp-V3.so'),
 
     'odm/lib64/libmt_mitee.so': blob_fixup()
         .replace_needed('lib_android_keymaster_keymint_utils.so', 'lib_android_keymaster_keymint_utils_V3.so')
@@ -205,9 +213,14 @@ blob_fixups: blob_fixups_user_type = {
     'system_ext/lib64/libimsma.so': blob_fixup()
         .replace_needed('libsink.so', 'libsink-mtk.so'),
 
+    'system_ext/lib64/libsink-mtk.so': blob_fixup()
+        .add_needed('libaudioclient_shim.so'),
+
     'odm/bin/hw/vendor.xiaomi.sensor.citsensorservice.aidl': blob_fixup()
         .replace_needed('libtinyxml2.so', 'libtinyxml2-v34.so')
         .replace_needed('libui.so', 'libui-v34.so'),
+    'vendor/bin/mnld': blob_fixup()
+        .replace_needed('libmnl.so', 'libmnl-v34.so'),
 }  # fmt: skip
 
 module = ExtractUtilsModule(
